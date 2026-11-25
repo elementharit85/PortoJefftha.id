@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NexChat Arcade — Pilih Game</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b1120;--panel:#0f172a;--line:#1e293b;--text:#e2e8f0;--mute:#94a3b8;--brand:#34d399;--warn:#fbbf24}
+*{box-sizing:border-box}
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--text);font-family:'Fredoka',system-ui,sans-serif;padding:env(safe-area-inset-top) 16px 24px}
+main{max-width:760px;margin:0 auto}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0}
+.who{display:flex;align-items:center;gap:10px;min-width:0}
+.who img{width:46px;height:46px;border-radius:14px;object-fit:cover;background:var(--line)}
+.who b{display:block;font-size:17px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.who span{font-size:13px;color:var(--mute)}
+h1{font-size:30px;margin:8px 0 4px}
+p{margin:0;color:var(--mute);font-size:14px;line-height:1.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:20px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column}
+.art{height:130px;position:relative;overflow:hidden}
+.jump .art{background:linear-gradient(#0b1120,#13263a)}
+.jet .art{background:#0b1120}
+.art i{position:absolute;border-radius:6px}
+.body{padding:16px;display:flex;flex-direction:column;gap:10px;flex:1}
+.body h2{margin:0;font-size:22px}
+.stats{display:flex;justify-content:space-between;font-size:13px;color:var(--mute);background:var(--bg);border-radius:12px;padding:10px 12px}
+.stats b{color:var(--brand);font-size:18px;display:block}
+.stats .rec b{color:var(--warn)}
+a.btn{display:block;text-align:center;text-decoration:none;font-weight:700;font-size:16px;padding:12px;border-radius:12px;background:var(--brand);color:#052e22;margin-top:auto}
+a.alt{background:var(--line);color:var(--text);padding:9px 16px;font-size:14px;border-radius:12px;text-decoration:none;font-weight:700}
+#msg{margin-top:18px;font-size:12px;color:var(--mute)}
+#noauth{display:none;text-align:center;margin-top:80px}
+#noauth a.btn{display:inline-block;padding:12px 24px;margin-top:16px}
+.cat{font-size:18px;margin:26px 0 0;display:flex;align-items:baseline;gap:8px}.cat small{color:var(--mute);font-size:12px;font-weight:500}
+</style>
+</head>
+<body>
+<main>
+  <div id="noauth"><h1>Belum masuk</h1><p id="noauthMsg">Masuk lewat chat dengan nomor 4-digit dan PIN, lalu tekan tombol gamepad.</p><a class="btn" href="index.html">Ke halaman chat</a></div>
+
+  <div id="hub" style="display:none">
+    <header>
+      <div class="who"><img id="uAvatar" alt=""><div style="min-width:0"><b id="uName"></b><span id="uNum"></span></div></div>
+      <a class="alt" href="index.html">Kembali ke chat</a>
+    </header>
+    <h1>Pilih game</h1>
+    <p>Skor tiap game (NexGrow: EXP dan rumah) tersimpan terpisah di akunmu.</p>
+
+    <h2 class="cat">Game Offline <small>— main sendiri</small></h2>
+    <div class="grid">
+      <section class="card jump">
+        <div class="art"><i style="left:40px;bottom:20px;width:70px;height:12px;background:#34d399"></i><i style="left:150px;bottom:62px;width:70px;height:12px;background:#38bdf8"></i><i style="left:230px;bottom:104px;width:70px;height:12px;background:#34d399"></i><i style="left:166px;bottom:76px;width:34px;height:34px;background:#6ee7b7;border-radius:10px"></i></div>
+        <div class="body">
+          <h2>NexJump</h2>
+          <p>Lompat naik dari platform ke platform. Jangan sampai jatuh.</p>
+          <div class="stats"><div>Skor terbaikmu<b id="jumpMine">0</b></div><div class="rec" style="text-align:right">Rekor <span id="jumpTopName"></span><b id="jumpTop">0</b></div></div>
+          <a class="btn" id="goJump" href="gamejump.html">Main NexJump</a>
+        </div>
+      </section>
+
+      <section class="card jet">
+        <div class="art"><i style="left:60px;top:20px;width:20px;height:20px;background:#fb923c;transform:rotate(45deg)"></i><i style="left:240px;top:40px;width:26px;height:26px;background:#f43f5e;transform:rotate(45deg)"></i><i style="left:178px;top:30px;width:4px;height:14px;background:#fbbf24"></i><i style="left:178px;top:60px;width:4px;height:14px;background:#fbbf24"></i><i style="left:166px;bottom:18px;width:28px;height:36px;background:#34d399;clip-path:polygon(50% 0,100% 100%,50% 75%,0 100%)"></i></div>
+        <div class="body">
+          <h2>NexJet</h2>
+          <p>Terbangkan jet, tembak musuh yang turun, bertahan dengan 3 nyawa.</p>
+          <div class="stats"><div>Skor terbaikmu<b id="jetMine">0</b></div><div class="rec" style="text-align:right">Rekor <span id="jetTopName"></span><b id="jetTop">0</b></div></div>
+          <a class="btn" id="goJet" href="gamejet.html">Main NexJet</a>
+        </div>
+      </section>
+
+      <section class="card grow">
+        <div class="art" style="background:linear-gradient(#15803d,#14532d)"><i style="left:150px;top:18px;width:60px;height:40px;background:#d97706;border-radius:4px"></i><i style="left:140px;top:6px;width:80px;height:20px;background:#7c2d12;clip-path:polygon(50% 0,100% 100%,0 100%)"></i><i style="left:50px;bottom:14px;width:60px;height:40px;background:#78350f"></i><i style="left:150px;bottom:14px;width:60px;height:40px;background:#78350f"></i><i style="left:250px;bottom:14px;width:60px;height:40px;background:#78350f"></i><i style="left:74px;bottom:40px;width:6px;height:30px;background:#facc15"></i><i style="left:174px;bottom:40px;width:6px;height:38px;background:#fde047"></i><i style="left:274px;bottom:40px;width:7px;height:50px;background:#4ade80"></i></div>
+        <div class="body">
+          <h2>NexGrow</h2>
+          <p>Bertani padi, jagung, dan tebu. Jual panen, beli rumah baru.</p>
+          <div class="stats"><div>EXP terbaikmu<b id="growMine">0</b></div><div class="rec" style="text-align:right">Rekor <span id="growTopName"></span><b id="growTop">0</b></div></div>
+          <a class="btn" id="goGrow" href="gamegrow.html">Main NexGrow</a>
+        </div>
+      </section>
+
+      <section class="card multi">
+        <div class="art" style="background:#0b1120"><i style="left:34px;top:22px;width:62px;height:44px;background:#2563eb;border-radius:10px"></i><i style="left:118px;top:48px;width:62px;height:44px;background:#7c3aed;border-radius:10px"></i><i style="left:202px;top:16px;width:62px;height:44px;background:#16a34a;border-radius:10px"></i><i style="left:286px;top:60px;width:62px;height:44px;background:#db2777;border-radius:10px"></i><i style="left:110px;bottom:8px;width:140px;height:22px;background:#0f172a;border:2px solid #34d399;border-radius:8px"></i></div>
+        <div class="body">
+          <h2>NexKelipatan</h2>
+          <p>Ketuk blok yang merupakan kelipatan angka target sebelum jatuh.</p>
+          <div class="stats"><div>Skor terbaikmu<b id="multiMine">0</b></div><div class="rec" style="text-align:right">Rekor <span id="multiTopName"></span><b id="multiTop">0</b></div></div>
+          <a class="btn" id="goMulti" href="gamekelipatan.html">Main NexKelipatan</a>
+        </div>
+      </section>
+
+    </div>
+
+    <h2 class="cat">Online Multiplayer <small>— lawan teman lewat kode kontak</small></h2>
+    <div class="grid">
+      <section class="card chess">
+        <div class="art" style="background:linear-gradient(#0b1120,#13263a)"><i style="left:60px;top:30px;width:240px;height:70px;background:repeating-linear-gradient(90deg,#e8dcc0 0 30px,#4b7a6a 30px 60px);transform:perspective(200px) rotateX(55deg);border-radius:4px"></i><i style="left:150px;top:16px;width:22px;height:46px;background:#f1f5f9;border-radius:10px 10px 4px 4px"></i><i style="left:196px;top:30px;width:20px;height:38px;background:#1e293b;border-radius:10px 10px 4px 4px"></i></div>
+        <div class="body">
+          <h2>NexChess 3D</h2>
+          <p>Catur 3D lawan bot atau teman secara online. Putar kamera dengan jari.</p>
+          <div class="stats"><div>Poinmu<b id="chessMine">0</b></div><div class="rec" style="text-align:right">Rekor <span id="chessTopName"></span><b id="chessTop">0</b></div></div>
+          <a class="btn" id="goChess" href="gamechess.html">Main NexChess</a>
+        </div>
+      </section>
+
+      <section class="card race">
+        <div class="art" style="background:#0b1120"><i style="left:70px;top:14px;width:220px;height:100px;border:26px solid #334155;border-radius:50%;background:#14532d"></i><i style="left:88px;top:104px;width:26px;height:14px;background:#ef4444;border-radius:4px"></i><i style="left:128px;top:104px;width:26px;height:14px;background:#3b82f6;border-radius:4px"></i><i style="left:262px;top:46px;width:14px;height:24px;background:#eab308;border-radius:4px"></i></div>
+        <div class="body">
+          <h2>NexRace</h2>
+          <p>Balapan tap 3 lap lawan teman. Kumpulkan poin, beli 5 mobil sport di garasi.</p>
+          <div class="stats"><div>Poinmu<b id="raceMine">0</b></div><div class="rec" style="text-align:right">Rekor <span id="raceTopName"></span><b id="raceTop">0</b></div></div>
+          <a class="btn" id="goRace" href="gamerace.html">Main NexRace</a>
+        </div>
+      </section>
+
+      <section class="card billiard">
+        <div class="art" style="background:#0b1120"><i style="left:50px;top:16px;width:260px;height:96px;background:#15803d;border:8px solid #5b3a1e;border-radius:10px"></i><i style="left:120px;top:56px;width:16px;height:16px;background:#f8fafc;border-radius:50%"></i><i style="left:200px;top:46px;width:16px;height:16px;background:#facc15;border-radius:50%"></i><i style="left:218px;top:56px;width:16px;height:16px;background:#111827;border-radius:50%"></i><i style="left:200px;top:66px;width:16px;height:16px;background:#dc2626;border-radius:50%"></i><i style="left:20px;top:84px;width:150px;height:5px;background:#fde68a;transform:rotate(-28deg);border-radius:3px"></i></div>
+        <div class="body">
+          <h2>NexBilliard</h2>
+          <p>Biliar bola 8 &amp; 9. Lawan bot atau kontak, beli stik dan meja custom.</p>
+          <div class="stats"><div>Coinmu<b id="billiardMine">0</b></div><div class="rec" style="text-align:right">Rekor <span id="billiardTopName"></span><b id="billiardTop">0</b></div></div>
+          <a class="btn" id="goBilliard" href="gamebilliard.html">Main NexBilliard</a>
+        </div>
+      </section>
+
+      <section class="card tictactoe">
+        <div class="art" style="background:#0b1120"><i style="left:120px;top:14px;width:120px;height:104px;background:repeating-linear-gradient(90deg,transparent 0 38px,#334155 38px 41px),repeating-linear-gradient(0deg,transparent 0 32px,#334155 32px 35px);border-radius:6px"></i><i style="left:128px;top:20px;width:26px;height:26px;color:#38bdf8;font:900 26px/26px sans-serif;text-align:center">X</i><i style="left:170px;top:54px;width:26px;height:26px;color:#fb7185;font:900 26px/26px sans-serif;text-align:center">O</i><i style="left:210px;top:88px;width:26px;height:26px;color:#38bdf8;font:900 26px/26px sans-serif;text-align:center">X</i></div>
+        <div class="body">
+          <h2>NexTicTacToe</h2>
+          <p>XO klasik. Lawan bot, teman satu layar, atau kontak secara online.</p>
+          <div class="stats"><div>Poinmu<b id="tictactoeMine">0</b></div><div class="rec" style="text-align:right">Rekor <span id="tictactoeTopName"></span><b id="tictactoeTop">0</b></div></div>
+          <a class="btn" id="goTtt" href="gametictactoe.html">Main XO</a>
+        </div>
+      </section>
+
+      <section class="card fight">
+        <div class="art" style="background:linear-gradient(#0f172a,#1e3a5f)"><i style="left:0;bottom:0;width:100%;height:22px;background:#1e293b;border-radius:0"></i><i style="left:150px;bottom:22px;width:60px;height:18px;background:#334155;border-radius:2px"></i><i style="left:166px;bottom:40px;width:28px;height:18px;background:#475569;border-radius:2px"></i><i style="left:70px;top:40px;width:12px;height:12px;border:3px solid #38bdf8;border-radius:50%"></i><i style="left:76px;top:52px;width:3px;height:30px;background:#38bdf8"></i><i style="left:64px;top:60px;width:30px;height:3px;background:#38bdf8"></i><i style="left:268px;top:40px;width:12px;height:12px;border:3px solid #f472b6;border-radius:50%"></i><i style="left:274px;top:52px;width:3px;height:30px;background:#f472b6"></i><i style="left:262px;top:60px;width:30px;height:3px;background:#f472b6"></i></div>
+        <div class="body">
+          <h2>NexFight</h2>
+          <p>Duel stickman 3 ronde di 3 arena. Lawan bot atau teman, beli perlengkapan dengan coin.</p>
+          <div class="stats"><div>Coinmu<b id="fightMine">0</b></div><div class="rec" style="text-align:right">Rekor <span id="fightTopName"></span><b id="fightTop">0</b></div></div>
+          <a class="btn" id="goFight" href="gamefight.html">Main NexFight</a>
+        </div>
+      </section>
+    </div>
+    <div id="msg"></div>
+  </div>
+</main>
+
+<script>
+const SUPABASE_URL = 'https://zyddldgtefrtwjgymbtk.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_hrVo6BmPk-4b8YQozWzn9g_4xJlLwa-';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const $ = id => document.getElementById(id);
+
+function fail(m) { $('noauthMsg').textContent = m; $('noauth').style.display = 'block'; }
+
+async function init() {
+  const params = new URLSearchParams(location.search);
+  let s = null;
+  try { s = JSON.parse(localStorage.getItem('nexchat_session_user') || 'null'); } catch (e) {}
+  const phone = params.get('phone') || s?.phone_4;
+  if (!phone || !s || s.phone_4 !== phone) return fail('Sesi chat tidak ditemukan. Masuk dulu lewat halaman chat.');
+
+  let user = { phone_4: s.phone_4, display_name: s.display_name, avatar_url: s.avatar_url };
+  try {
+    const { data, error } = await sb.from('chat_users').select('phone_4,pin,display_name,avatar_url').eq('phone_4', phone).maybeSingle();
+    if (!error && data) {
+      if (data.pin !== s.pin) return fail('PIN tidak cocok. Masuk ulang lewat halaman chat.');
+      user = { phone_4: data.phone_4, display_name: data.display_name, avatar_url: data.avatar_url || s.avatar_url };
+    }
+  } catch (e) {}
+  history.replaceState(null, '', location.pathname);
+
+  $('uAvatar').src = user.avatar_url || '';
+  $('uName').textContent = user.display_name;
+  $('uNum').textContent = '#' + user.phone_4;
+  $('hub').style.display = 'block';
+
+  // game.html tidak perlu menerima parameter: gamejump/gamejet membaca sesi dari localStorage
+  await loadScores(user);
+}
+
+const HN = ['Gubuk', 'Rumah Kayu', 'Rumah Batu', 'Villa'];
+async function loadScores(user) {
+  const { data, error } = await sb.from('game_scores').select('phone_4,game,display_name,best_score,data').order('best_score', { ascending: false }).limit(500);
+  if (error) { $('msg').textContent = 'Skor belum bisa dimuat. Jalankan SQL terbaru di Supabase (kolom game).'; return; }
+  for (const g of ['jump', 'jet', 'grow', 'multi', 'chess', 'race', 'billiard', 'tictactoe', 'fight']) {
+    const rows = data.filter(r => r.game === g);
+    const mine = rows.find(r => r.phone_4 === user.phone_4);
+    $(g + 'Mine').textContent = mine ? mine.best_score : 0;
+    if (rows[0]) { $(g + 'Top').textContent = rows[0].best_score; $(g + 'TopName').textContent = '(' + rows[0].display_name + (g === 'grow' ? ' · ' + (HN[rows[0].data?.house || 0] || '') : '') + ')'; }
+  }
+  $('msg').textContent = 'Tersambung ke Supabase';
+}
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Experience Jefftha</title>
+  <link rel="icon" href="images/icon.png" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="config.js"></script>
+  <link rel="stylesheet" href="transitions.css">
+</head>
+<body class="bg-bg text-white font-sans antialiased overflow-x-hidden min-h-screen flex flex-col">
+  <div id="site-header"></div>
+
+  <main class="flex-grow max-w-4xl mx-auto w-full px-6 pt-32">
+    <div class="text-center animate-fade-up">
+      <h1 class="text-4xl md:text-5xl font-bold">Pengalaman <span class="text-rose">&amp; Organisasi</span></h1>
+      <p class="mt-3 text-white/60 max-w-xl mx-auto">Pelayanan, organisasi, dan event yang membentuk cara saya bekerja dalam tim.</p>
+    </div>
+
+    <!-- HIGHLIGHT MULTIMEDIA -->
+    <section data-reveal class="mt-14 relative overflow-hidden rounded-3xl border border-rose/30 bg-gradient-to-br from-surface to-deep p-8 md:p-10">
+      <div class="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-rose/20 blur-3xl"></div>
+      <span class="relative text-xs uppercase tracking-widest text-rose">Highlight</span>
+      <h2 class="relative mt-2 text-2xl md:text-3xl font-bold">Koordinator Multimedia Gereja</h2>
+      <p class="relative mt-3 text-white/60 leading-relaxed">
+        Mengoordinasi tim multimedia untuk ibadah dan acara kerohanian, mencakup penguasaan visual, audio, dan event:
+        dari persiapan perangkat, pembagian tugas tim, sampai kelancaran acara berlangsung.
+      </p>
+      <div class="relative mt-6 grid sm:grid-cols-3 gap-4">
+        <div class="rounded-xl bg-white/5 border border-white/10 p-4 hover:-translate-y-1 hover:border-rose/50 transition">
+          <p class="text-2xl">&#127912;</p><p class="mt-1 font-semibold text-rose">Visual</p>
+          <p class="text-sm text-white/60">Tampilan layar, slide, dan materi visual acara.</p>
+        </div>
+        <div class="rounded-xl bg-white/5 border border-white/10 p-4 hover:-translate-y-1 hover:border-rose/50 transition">
+          <p class="text-2xl">&#127897;</p><p class="mt-1 font-semibold text-rose">Audio</p>
+          <p class="text-sm text-white/60">Pengaturan suara dan operasional perangkat audio.</p>
+        </div>
+        <div class="rounded-xl bg-white/5 border border-white/10 p-4 hover:-translate-y-1 hover:border-rose/50 transition">
+          <p class="text-2xl">&#127914;</p><p class="mt-1 font-semibold text-rose">Event</p>
+          <p class="text-sm text-white/60">Koordinasi tim dan alur acara dari awal sampai selesai.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TIMELINE -->
+    <h2 data-reveal class="mt-16 text-2xl font-bold text-rose">Timeline</h2>
+    <ol class="mt-8 relative border-l border-line ml-3 space-y-10">
+      <li data-reveal class="pl-8 relative">
+        <span class="absolute -left-[7px] top-2 w-3 h-3 rounded-full bg-ember ring-4 ring-bg animate-pulse"></span>
+        <p class="text-sm text-rose">[Tahun] - Sekarang</p>
+        <h3 class="text-lg font-semibold">Koordinator Multimedia - [Nama Gereja]</h3>
+        <p class="mt-1 text-white/60">Memimpin tim multimedia: visual, audio, dan pelaksanaan event ibadah.</p>
+      </li>
+      <li data-reveal class="pl-8 relative">
+        <span class="absolute -left-[7px] top-2 w-3 h-3 rounded-full bg-rose ring-4 ring-bg"></span>
+        <p class="text-sm text-rose">[Tahun]</p>
+        <h3 class="text-lg font-semibold">Pertemuan Event Kerohanian Internasional - LevelUP</h3>
+        <p class="mt-1 text-white/60">[Tuliskan peran Anda, mis. peserta/panitia/tim multimedia, dan apa yang dipelajari.]</p>
+      </li>
+      <li data-reveal class="pl-8 relative">
+        <span class="absolute -left-[7px] top-2 w-3 h-3 rounded-full bg-rose ring-4 ring-bg"></span>
+        <p class="text-sm text-rose">[Tahun]</p>
+        <h3 class="text-lg font-semibold">Event Anak Muda (Youth)</h3>
+        <p class="mt-1 text-white/60">[Tuliskan peran dan kontribusi Anda di acara ini.]</p>
+      </li>
+      <li data-reveal class="pl-8 relative">
+        <span class="absolute -left-[7px] top-2 w-3 h-3 rounded-full bg-rose ring-4 ring-bg"></span>
+        <p class="text-sm text-rose">[Tahun]</p>
+        <h3 class="text-lg font-semibold">[Nama Organisasi]</h3>
+        <p class="mt-1 text-white/60">[Jabatan/peran dan pencapaian Anda.]</p>
+      </li>
+      <li data-reveal class="pl-8 relative">
+        <span class="absolute -left-[7px] top-2 w-3 h-3 rounded-full bg-rose ring-4 ring-bg"></span>
+        <p class="text-sm text-rose">Sejak SMP</p>
+        <h3 class="text-lg font-semibold">Pelayanan Multimedia Gereja</h3>
+        <p class="mt-1 text-white/60">Awal belajar visual, audio, video, dan pengoperasian perangkat multimedia.</p>
+      </li>
+      <!-- Salin blok <li> untuk menambah pengalaman lain. -->
+    </ol>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="main.js"></script>
+</body>
+</html>

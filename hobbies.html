@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hobbies Jefftha</title>
+  <link rel="icon" href="images/icon.png" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="config.js"></script>
+  <link rel="stylesheet" href="transitions.css">
+</head>
+<body class="bg-bg text-white font-sans antialiased overflow-x-hidden min-h-screen flex flex-col">
+  <div id="site-header"></div>
+
+  <main class="flex-grow max-w-6xl mx-auto w-full px-6 pt-32">
+    <h1 class="text-center text-4xl md:text-5xl font-bold animate-fade-up">My <span class="text-rose">Hobbies</span></h1>
+
+    <section class="mt-14 grid md:grid-cols-3 gap-8">
+      <article data-reveal class="group rounded-2xl overflow-hidden bg-surface/80 border border-line hover:border-rose/60 hover:-translate-y-2 hover:shadow-xl hover:shadow-rose/10 transition duration-300">
+        <div class="overflow-hidden"><img src="images/hobi1.jpeg" alt="Foto bermain alat musik" class="w-full h-64 object-cover group-hover:scale-110 transition duration-700"></div>
+        <div class="p-6 text-center">
+          <h2 class="text-lg font-semibold text-rose">Bermain Alat Musik</h2>
+          <p class="mt-2 text-sm text-[#d1cfcf] leading-relaxed">Bermain musik adalah hobi saya untuk mengekspresikan kreativitas dan menyegarkan pikiran di waktu luang.</p>
+        </div>
+      </article>
+      <article data-reveal data-delay="120" class="group rounded-2xl overflow-hidden bg-surface/80 border border-line hover:border-rose/60 hover:-translate-y-2 hover:shadow-xl hover:shadow-rose/10 transition duration-300">
+        <div class="overflow-hidden"><img src="images/hobi2.jpeg" alt="Foto bermain biliar" class="w-full h-64 object-cover group-hover:scale-110 transition duration-700"></div>
+        <div class="p-6 text-center">
+          <h2 class="text-lg font-semibold text-rose">Bermain Biliyard</h2>
+          <p class="mt-2 text-sm text-[#d1cfcf] leading-relaxed">Bermain biliar melatih fokus, konsentrasi, ketenangan, serta ketepatan perhitungan sudut pukulan bola.</p>
+        </div>
+      </article>
+      <article data-reveal data-delay="240" class="group rounded-2xl overflow-hidden bg-surface/80 border border-line hover:border-rose/60 hover:-translate-y-2 hover:shadow-xl hover:shadow-rose/10 transition duration-300">
+        <div class="overflow-hidden"><img src="images/hobi3.jpeg" alt="Foto mendengarkan musik" class="w-full h-64 object-cover group-hover:scale-110 transition duration-700"></div>
+        <div class="p-6 text-center">
+          <h2 class="text-lg font-semibold text-rose">Mendengarkan Musik</h2>
+          <p class="mt-2 text-sm text-[#d1cfcf] leading-relaxed">Mendengarkan musik membantu saya memperbaiki suasana hati, melepas penat setelah beraktivitas, serta mencari inspirasi baru.</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="main.js"></script>
+</body>
+</html>

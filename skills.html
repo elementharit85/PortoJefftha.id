@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skills Jefftha</title>
+  <link rel="icon" href="images/icon.png" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="config.js"></script>
+  <link rel="stylesheet" href="transitions.css">
+</head>
+<body class="bg-bg text-white font-sans antialiased overflow-x-hidden min-h-screen flex flex-col">
+  <div id="site-header"></div>
+
+  <main class="flex-grow max-w-6xl mx-auto w-full px-6 pt-32">
+    <div class="text-center animate-fade-up">
+      <h1 class="text-4xl md:text-5xl font-bold">Skills <span class="text-rose">&amp; Karya</span></h1>
+      <p class="mt-3 text-white/60 max-w-xl mx-auto">Kemampuan yang saya pelajari dan hasil yang sudah saya buat.</p>
+    </div>
+
+    <!-- SKILLS -->
+    <section class="mt-14 grid md:grid-cols-3 gap-6">
+      <article data-reveal class="p-6 rounded-2xl bg-surface/80 border border-line hover:border-rose/60 transition">
+        <h2 class="text-lg font-semibold text-rose">Multimedia</h2>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <span class="chip">Visual</span><span class="chip">Audio</span><span class="chip">Video</span><span class="chip">Operator Event</span>
+          <!-- TAMBAHKAN skill multimedia lain di sini, mis. Editing Video, OBS, Mixer -->
+        </div>
+      </article>
+      <article data-reveal data-delay="120" class="p-6 rounded-2xl bg-surface/80 border border-line hover:border-rose/60 transition">
+        <h2 class="text-lg font-semibold text-rose">Jaringan &amp; Keamanan</h2>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <span class="chip">Linux</span><span class="chip">MikroTik</span><span class="chip">Troubleshooting</span><span class="chip">SQL Injection (lab)</span><span class="chip">ARP Spoofing (lab)</span>
+        </div>
+      </article>
+      <article data-reveal data-delay="240" class="p-6 rounded-2xl bg-surface/80 border border-line hover:border-rose/60 transition">
+        <h2 class="text-lg font-semibold text-rose">Pemrograman &amp; Web</h2>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <span class="chip">HTML</span><span class="chip">Tailwind CSS</span><span class="chip">Visual Basic (dasar)</span>
+        </div>
+      </article>
+    </section>
+
+    <!-- SOFT SKILLS -->
+    <section data-reveal class="mt-12 p-6 rounded-2xl border border-line bg-deep/60">
+      <h2 class="text-lg font-semibold text-rose">Soft Skills</h2>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <span class="chip">Kerja Sama Tim</span><span class="chip">Koordinasi</span><span class="chip">Cepat Belajar</span><span class="chip">Tanggung Jawab</span>
+      </div>
+    </section>
+
+    <!-- HASIL KARYA -->
+    <section class="mt-20">
+      <h2 data-reveal class="text-3xl font-bold text-center">Hasil <span class="text-rose">Karya</span></h2>
+      <div class="mt-10 grid md:grid-cols-3 gap-6">
+        <!-- Salin blok <article> ini untuk menambah karya. Ganti gambar, judul, dan deskripsi. -->
+        <article data-reveal class="group rounded-2xl overflow-hidden bg-surface/80 border border-line hover:border-rose/60 hover:-translate-y-2 transition duration-300">
+          <div class="h-44 bg-gradient-to-br from-rose/20 to-ember/10 flex items-center justify-center text-5xl group-hover:scale-105 transition">&#127909;</div>
+          <div class="p-5">
+            <h3 class="font-semibold text-rose">Judul Karya 1</h3>
+            <p class="mt-2 text-sm text-white/60">Tambahkan deskripsi singkat: apa yang dibuat, alat yang dipakai, dan hasilnya.</p>
+          </div>
+        </article>
+        <article data-reveal data-delay="120" class="group rounded-2xl overflow-hidden bg-surface/80 border border-line hover:border-rose/60 hover:-translate-y-2 transition duration-300">
+          <div class="h-44 bg-gradient-to-br from-rose/20 to-ember/10 flex items-center justify-center text-5xl group-hover:scale-105 transition">&#127760;</div>
+          <div class="p-5">
+            <h3 class="font-semibold text-rose">Judul Karya 2</h3>
+            <p class="mt-2 text-sm text-white/60">Tambahkan deskripsi singkat: apa yang dibuat, alat yang dipakai, dan hasilnya.</p>
+          </div>
+        </article>
+        <article data-reveal data-delay="240" class="group rounded-2xl overflow-hidden bg-surface/80 border border-line hover:border-rose/60 hover:-translate-y-2 transition duration-300">
+          <div class="h-44 bg-gradient-to-br from-rose/20 to-ember/10 flex items-center justify-center text-5xl group-hover:scale-105 transition">&#128295;</div>
+          <div class="p-5">
+            <h3 class="font-semibold text-rose">Judul Karya 3</h3>
+            <p class="mt-2 text-sm text-white/60">Tambahkan deskripsi singkat: apa yang dibuat, alat yang dipakai, dan hasilnya.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <!-- Gaya chip memakai @apply via Tailwind CDN -->
+  <style type="text/tailwindcss">
+    @layer components {
+      .chip { @apply px-3 py-1 rounded-full text-sm bg-rose/10 text-[#ffb4b4] border border-rose/20 hover:bg-rose hover:text-bg transition cursor-default; }
+    }
+  </style>
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+/* Transisi halus antar halaman (View Transitions API: Chrome, Edge, Safari 18.2+) */
+@view-transition { navigation: auto; }
+
+/* Navbar tetap diam, tidak ikut berkedip saat pindah halaman */
+#nav { view-transition-name: site-nav; }
+::view-transition-group(site-nav) { animation: none; }
+::view-transition-old(site-nav) { display: none; }
+::view-transition-new(site-nav) { animation: none; }
+
+/* Halaman lama memudar, halaman baru fade in + popup naik */
+::view-transition-old(root) { animation: vt-out .3s ease both; }
+::view-transition-new(root) { animation: vt-in .3s ease both; }
+
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(14px) scale(.985); } }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
