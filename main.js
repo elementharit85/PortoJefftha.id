@@ -1,4 +1,4 @@
-// Script bersama: navbar, footer, background animasi, scroll reveal, typing, lightbox
+// Script bersama: navbar, footer, background, transisi halaman, scroll reveal, typing, lightbox
 (function () {
   const pages = [
     ['index.html', 'Home'],
@@ -9,51 +9,59 @@
     ['gallery.html', 'Gallery'],
     ['contact.html', 'Contact'],
   ];
+  const order = pages.map(p => p[0]);
   const current = location.pathname.split('/').pop() || 'index.html';
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const root = document.documentElement;
 
-  const link = (h, t, mobile) => {
-    const active = h === current;
-    const base = mobile ? 'block px-4 py-3 rounded-xl text-base' : 'px-3 py-2 rounded-full text-sm';
-    const state = active
-      ? 'bg-rose/15 text-rose font-semibold'
-      : 'text-white/75 hover:text-white hover:bg-white/5';
-    return `<a href="${h}" class="${base} transition ${state}">${t}</a>`;
-  };
+  // Arah transisi (maju/mundur) dari halaman sebelumnya
+  try {
+    const d = sessionStorage.getItem('navDir');
+    if (d) { root.dataset.dir = d; sessionStorage.removeItem('navDir'); }
+  } catch (e) {}
 
-  // ---------- Header ----------
+  // ---------- Background (CSS biasa, sama di semua halaman) ----------
+  const bg = document.createElement('div');
+  bg.className = 'site-bg';
+  bg.innerHTML = '<span class="b1"></span><span class="b2"></span><span class="dots"></span>';
+  document.body.prepend(bg);
+  // Sinkronkan animasi blob antar halaman agar tidak mulai ulang
+  try {
+    const t0 = Number(sessionStorage.getItem('bgT0')) || Date.now();
+    sessionStorage.setItem('bgT0', t0);
+    const elapsed = (Date.now() - t0) / 1000;
+    bg.querySelectorAll('.b1, .b2').forEach(b => { b.style.animationDelay = `-${elapsed}s`; });
+  } catch (e) {}
+
+  // ---------- Header (CSS biasa: tidak bergantung pada Tailwind) ----------
+  const navLink = (h, t) =>
+    `<a href="${h}"${h === current ? ' class="is-active" aria-current="page"' : ''}>${t}</a>`;
   const headerMount = document.getElementById('site-header');
   if (headerMount) {
     headerMount.innerHTML = `
-      <header id="nav" class="fixed top-0 inset-x-0 z-50 transition-all duration-300">
-        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <a href="index.html" class="text-2xl font-extrabold text-rose tracking-tight hover:scale-105 transition">Jefftha</a>
-          <nav class="hidden md:flex items-center gap-1">${pages.map(p => link(p[0], p[1])).join('')}</nav>
-          <button id="menuBtn" aria-label="Menu" class="md:hidden p-2 rounded-lg hover:bg-white/10 transition">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <header id="nav" class="site-nav">
+        <div class="site-nav__bar">
+          <a href="index.html" class="site-nav__logo">Jefftha</a>
+          <nav class="site-nav__links" aria-label="Navigasi utama">${pages.map(p => navLink(p[0], p[1])).join('')}</nav>
+          <button id="menuBtn" type="button" class="site-nav__burger" aria-label="Menu" aria-expanded="false">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
           </button>
         </div>
-        <div id="mobileMenu" class="md:hidden hidden mx-4 mb-3 p-2 rounded-2xl bg-deep/95 backdrop-blur-xl border border-line">
-          ${pages.map(p => link(p[0], p[1], true)).join('')}
-        </div>
-        <div id="progress" class="absolute bottom-0 left-0 h-0.5 w-0 bg-gradient-to-r from-rose to-ember"></div>
+        <div id="mobileMenu" class="site-nav__menu">${pages.map(p => navLink(p[0], p[1])).join('')}</div>
+        <div id="progress" class="site-nav__progress"></div>
       </header>`;
-    const nav = document.getElementById('nav');
     const bar = document.getElementById('progress');
     const onScroll = () => {
-      const y = window.scrollY;
-      const scrolled = y > 20;
-      nav.classList.toggle('bg-bg/70', scrolled);
-      nav.classList.toggle('backdrop-blur-xl', scrolled);
-      nav.classList.toggle('border-b', scrolled);
-      nav.classList.toggle('border-line', scrolled);
       const h = document.documentElement.scrollHeight - window.innerHeight;
-      bar.style.width = h > 0 ? (y / h) * 100 + '%' : '0%';
+      bar.style.width = h > 0 ? (window.scrollY / h) * 100 + '%' : '0%';
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
-    document.getElementById('menuBtn').addEventListener('click', () =>
-      document.getElementById('mobileMenu').classList.toggle('hidden'));
+    const menuBtn = document.getElementById('menuBtn');
+    menuBtn.addEventListener('click', () => {
+      const open = document.getElementById('mobileMenu').classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', open);
+    });
   }
 
   // ---------- Footer ----------
@@ -109,58 +117,69 @@
       window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }));
   }
 
-  // ---------- Background blobs ----------
-  const bg = document.createElement('div');
-  bg.className = 'fixed inset-0 -z-10 overflow-hidden pointer-events-none';
-  bg.innerHTML = `
-    <div class="absolute -top-32 -left-32 w-[28rem] h-[28rem] rounded-full bg-rose/20 blur-3xl animate-blob"></div>
-    <div class="absolute top-1/2 -right-40 w-[32rem] h-[32rem] rounded-full bg-ember/15 blur-3xl animate-blob-slow"></div>
-    <div class="absolute inset-0 opacity-[0.04]" style="background-image:radial-gradient(#fff 1px,transparent 1px);background-size:28px 28px"></div>`;
-  document.body.prepend(bg);
-  // Sinkronkan animasi blob antar halaman agar tidak mulai ulang (tidak patah-patah)
-  try {
-    const t0 = Number(sessionStorage.getItem('bgT0')) || Date.now();
-    sessionStorage.setItem('bgT0', t0);
-    const elapsed = (Date.now() - t0) / 1000;
-    bg.querySelectorAll('.animate-blob, .animate-blob-slow').forEach(b => { b.style.animationDelay = `-${elapsed}s`; });
-  } catch (e) {}
+  // ---------- Transisi keluar: konten memudar + geser sebelum pindah halaman ----------
+  const pageEls = () => [document.querySelector('main'), document.getElementById('site-footer')].filter(Boolean);
+  document.addEventListener('click', (e) => {
+    if (reduce || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const a = e.target.closest('a[href]');
+    if (!a || a.target === '_blank' || a.hasAttribute('download')) return;
+    const url = new URL(a.href, location.href);
+    if (url.origin !== location.origin || url.pathname === location.pathname) return;
+    const to = url.pathname.split('/').pop() || 'index.html';
+    const fromI = order.indexOf(current), toI = order.indexOf(to);
+    if (toI === -1) return; // bukan halaman menu: pindah biasa
+    e.preventDefault();
+    const forward = toI > fromI;
+    try { sessionStorage.setItem('navDir', forward ? 'fwd' : 'back'); } catch (err) {}
+    const mm = document.getElementById('mobileMenu');
+    if (mm) mm.classList.remove('open');
+    pageEls().forEach(el => el.animate(
+      [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: `translateX(${forward ? -48 : 48}px) scale(.985)` }],
+      { duration: 240, easing: 'cubic-bezier(.4,0,1,1)', fill: 'forwards' }));
+    setTimeout(() => { location.href = a.href; }, 240);
+  });
+  // Tombol back/forward browser (bfcache): batalkan animasi keluar
+  window.addEventListener('pageshow', (e) => {
+    if (e.persisted) pageEls().forEach(el => el.getAnimations().forEach(an => an.cancel()));
+  });
 
-  // ---------- Transisi halaman (fallback untuk browser tanpa View Transitions, mis. Firefox) ----------
-  if (!('startViewTransition' in document) && !reduce) {
-    const mainEl = document.querySelector('main');
-    if (mainEl) mainEl.animate(
-      [{ opacity: 0, transform: 'translateY(14px) scale(.985)' }, { opacity: 1, transform: 'none' }],
-      { duration: 450, easing: 'ease-out' });
-    document.addEventListener('click', (e) => {
-      const a = e.target.closest('a[href]');
-      if (!a || a.target === '_blank' || e.metaKey || e.ctrlKey || e.shiftKey) return;
-      const url = new URL(a.href, location.href);
-      if (url.origin !== location.origin || url.pathname === location.pathname) return;
-      e.preventDefault();
-      document.body.style.transition = 'opacity .25s ease';
-      document.body.style.opacity = '0';
-      setTimeout(() => { location.href = a.href; }, 250);
-    });
-    window.addEventListener('pageshow', (e) => { if (e.persisted) document.body.style.opacity = '1'; });
+  // ---------- Siap tampil: tunggu Tailwind selesai, lalu animasi masuk ----------
+  function whenTailwindReady(cb) {
+    const probe = document.createElement('div');
+    probe.className = 'hidden';
+    document.body.appendChild(probe);
+    const t0 = performance.now();
+    (function check() {
+      const ready = getComputedStyle(probe).display === 'none';
+      if (ready || performance.now() - t0 > 1500) { probe.remove(); cb(); }
+      else requestAnimationFrame(check);
+    })();
   }
 
-  // ---------- Scroll reveal ----------
-  const items = document.querySelectorAll('[data-reveal]');
-  if (reduce || !('IntersectionObserver' in window)) return initRest();
-  items.forEach(el => {
-    el.classList.add('opacity-0', 'translate-y-8', 'scale-95', 'transition-all', 'duration-700', 'ease-out');
-    if (el.dataset.delay) el.style.transitionDelay = el.dataset.delay + 'ms';
-  });
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.remove('opacity-0', 'translate-y-8', 'scale-95');
-        io.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.12 });
-  items.forEach(el => io.observe(el));
   initRest();
+  whenTailwindReady(() => {
+    initReveal();
+    root.classList.add('is-ready');
+  });
+
+  // ---------- Scroll reveal ----------
+  function initReveal() {
+    const items = document.querySelectorAll('[data-reveal]');
+    if (reduce || !('IntersectionObserver' in window)) return;
+    items.forEach(el => {
+      el.classList.add('opacity-0', 'translate-y-8', 'scale-95', 'transition-all', 'duration-700', 'ease-out');
+      if (el.dataset.delay) el.style.transitionDelay = el.dataset.delay + 'ms';
+    });
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.remove('opacity-0', 'translate-y-8', 'scale-95');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    items.forEach(el => io.observe(el));
+  }
 
   // ---------- Typing + Lightbox ----------
   function initRest() {
