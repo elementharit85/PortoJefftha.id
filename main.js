@@ -59,17 +59,54 @@
   // ---------- Footer ----------
   const footerMount = document.getElementById('site-footer');
   if (footerMount) {
+    const footLink = (h, t) => {
+      const active = h === current;
+      return `<li><a href="${h}" ${active ? 'aria-current="page"' : ''} class="inline-block py-1.5 text-sm transition ${active ? 'text-rose font-semibold' : 'text-white/60 hover:text-rose hover:translate-x-1'}">${t}</a></li>`;
+    };
+    const social = (href, label, svg) =>
+      `<a href="${href}" target="_blank" rel="noopener" aria-label="${label}" class="w-10 h-10 rounded-full bg-white/10 text-white/70 flex items-center justify-center hover:bg-rose hover:text-bg hover:-translate-y-1 transition">${svg}</a>`;
+    const icons = {
+      ig: '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>',
+      fb: '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v2H7v4h3v7h4v-7h3l1-4h-4V8z"/></svg>',
+      yt: '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg>',
+    };
     footerMount.innerHTML = `
       <footer class="relative border-t border-line bg-deep/80 mt-24">
-        <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-white/50">
-          <p>&copy; 2026 Jefftha.id Hak cipta.</p>
-          <div class="flex gap-5">
-            <a class="hover:text-rose transition" href="https://www.instagram.com/yefta_f.s" target="_blank" rel="noopener">Instagram</a>
-            <a class="hover:text-rose transition" href="https://www.youtube.com/@theyeftatz" target="_blank" rel="noopener">YouTube</a>
-            <a class="hover:text-rose transition" href="contact.html">Contact</a>
+        <div class="max-w-6xl mx-auto px-6 pt-14 pb-8">
+          <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+            <div>
+              <a href="index.html" class="text-2xl font-extrabold text-rose tracking-tight inline-block hover:scale-105 transition">Jefftha</a>
+              <p class="mt-3 text-sm text-white/50 leading-relaxed max-w-xs">Mahasiswa Informatika, koordinator multimedia, dan content creator.</p>
+              <a href="contact.html" class="mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-rose text-bg text-sm font-semibold hover:-translate-y-0.5 hover:shadow-lg hover:shadow-rose/30 transition">Hubungi Saya <span>&rarr;</span></a>
+            </div>
+            <nav aria-label="Navigasi footer">
+              <h3 class="text-sm font-bold text-white/80">Menu</h3>
+              <ul class="mt-3">${pages.map(p => footLink(p[0], p[1])).join('')}</ul>
+            </nav>
+            <div>
+              <h3 class="text-sm font-bold text-white/80">Hubungi Saya</h3>
+              <a href="mailto:yeftaforall@gmail.com" class="mt-3 inline-block text-sm text-white/60 hover:text-rose transition break-all">yeftaforall@gmail.com</a>
+              <p class="mt-2 text-sm text-white/40">Terbuka untuk organisasi &amp; magang.</p>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-white/80">Follow Me On:</h3>
+              <div class="mt-3 flex gap-3">
+                ${social('https://www.instagram.com/yefta_f.s', 'Instagram', icons.ig)}
+                ${social('https://www.facebook.com/p/Yefta-Fernando-Setiawan-100006210379344', 'Facebook', icons.fb)}
+                ${social('https://www.youtube.com/@theyeftatz', 'YouTube', icons.yt)}
+              </div>
+            </div>
+          </div>
+          <div class="mt-12 pt-6 border-t border-line/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-white/50">
+            <p>&copy; 2026 Jefftha.id Hak cipta.</p>
+            <button id="toTop" type="button" class="group inline-flex items-center gap-2 px-4 py-2 rounded-full border border-rose/40 text-rose hover:bg-rose hover:text-bg transition">
+              Ke atas <span class="group-hover:-translate-y-0.5 transition">&uarr;</span>
+            </button>
           </div>
         </div>
       </footer>`;
+    document.getElementById('toTop').addEventListener('click', () =>
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }));
   }
 
   // ---------- Background blobs ----------
