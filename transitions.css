@@ -1,19 +1,67 @@
-/* Transisi halus antar halaman (View Transitions API: Chrome, Edge, Safari 18.2+) */
-@view-transition { navigation: auto; }
+/* =====================================================================
+   Gaya inti (CSS biasa, TIDAK bergantung pada Tailwind CDN)
+   Navbar + background memakai CSS biasa supaya tampil sama persis sejak
+   frame pertama di setiap halaman, jadi tidak ada lompatan/geser antar halaman.
+   ===================================================================== */
 
-/* Navbar tetap diam, tidak ikut berkedip saat pindah halaman */
-#nav { view-transition-name: site-nav; }
-::view-transition-group(site-nav) { animation: none; }
-::view-transition-old(site-nav) { display: none; }
-::view-transition-new(site-nav) { animation: none; }
+/* Cegah geser horizontal karena scrollbar muncul/hilang antar halaman */
+html { background: #180707; scrollbar-gutter: stable; }
+@supports not (scrollbar-gutter: stable) { html { overflow-y: scroll; } }
+body { background: #180707; }
 
-/* Halaman lama memudar, halaman baru fade in + popup naik */
-::view-transition-old(root) { animation: vt-out .3s ease both; }
-::view-transition-new(root) { animation: vt-in .3s ease both; }
+/* ---------- Background ---------- */
+.site-bg { position: fixed; inset: 0; z-index: -10; overflow: hidden; pointer-events: none; }
+.site-bg > * { position: absolute; }
+.site-bg .b1, .site-bg .b2 { border-radius: 9999px; filter: blur(64px); }
+.site-bg .b1 { top: -8rem; left: -8rem; width: 28rem; height: 28rem; background: rgba(255,145,145,.20); animation: siteBlob 18s ease-in-out infinite; }
+.site-bg .b2 { top: 50%; right: -10rem; width: 32rem; height: 32rem; background: rgba(223,49,10,.15); animation: siteBlob 26s ease-in-out infinite reverse; }
+.site-bg .dots { inset: 0; opacity: .04; background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 28px 28px; }
+@keyframes siteBlob {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(40px,-30px) scale(1.15); }
+  66% { transform: translate(-30px,30px) scale(.9); }
+}
 
-@keyframes vt-out { to { opacity: 0; } }
-@keyframes vt-in { from { opacity: 0; transform: translateY(14px) scale(.985); } }
+/* ---------- Navbar (tetap, tidak berubah antar halaman) ---------- */
+.site-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; font-family: Inter, Arial, Helvetica, sans-serif;
+  background: rgba(24,7,7,.72); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border-bottom: 1px solid #3d1414; }
+.site-nav__bar { max-width: 72rem; margin: 0 auto; padding: 0 1.5rem; height: 4rem; display: flex; align-items: center; justify-content: space-between; }
+.site-nav__logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -.025em; color: #ff9191; text-decoration: none; transition: transform .2s; }
+.site-nav__logo:hover { transform: scale(1.05); }
+.site-nav__links { display: none; align-items: center; gap: .25rem; }
+.site-nav__links a, .site-nav__menu a { font-weight: 500; text-decoration: none; color: rgba(255,255,255,.75); transition: background-color .2s, color .2s; }
+.site-nav__links a { padding: .5rem .75rem; border-radius: 9999px; font-size: .875rem; }
+.site-nav__links a:hover, .site-nav__menu a:hover { color: #fff; background: rgba(255,255,255,.06); }
+/* Tebal huruf SAMA untuk link aktif, supaya lebar teks tidak berubah dan menu tidak bergeser */
+.site-nav__links a.is-active, .site-nav__menu a.is-active { color: #ff9191; background: rgba(255,145,145,.15); }
+.site-nav__burger { display: block; padding: .5rem; border: 0; border-radius: .5rem; background: none; color: #fff; cursor: pointer; line-height: 0; }
+.site-nav__burger:hover { background: rgba(255,255,255,.1); }
+.site-nav__menu { display: none; margin: 0 1rem .75rem; padding: .5rem; border-radius: 1rem; background: rgba(14,4,4,.95); border: 1px solid #3d1414; }
+.site-nav__menu.open { display: block; }
+.site-nav__menu a { display: block; padding: .75rem 1rem; border-radius: .75rem; font-size: 1rem; }
+.site-nav__progress { position: absolute; bottom: 0; left: 0; height: 2px; width: 0; background: linear-gradient(90deg, #ff9191, #df310a); }
+@media (min-width: 768px) {
+  .site-nav__links { display: flex; }
+  .site-nav__burger, .site-nav__menu { display: none !important; }
+}
+
+/* ---------- Transisi halaman: muncul + geser ----------
+   Konten disembunyikan sampai Tailwind siap (html.is-ready), lalu fade + geser masuk.
+   Arah geser mengikuti urutan menu (maju = dari kanan, mundur = dari kiri).
+   Cadangan: jika JS gagal, konten tetap muncul setelah 2,5 detik. */
+main, #site-footer { opacity: 0; animation: siteFailsafe 0s 2.5s forwards; }
+@keyframes siteFailsafe { to { opacity: 1; } }
+html[data-dir="fwd"]  { --enter-x: 56px; --enter-y: 0px; }
+html[data-dir="back"] { --enter-x: -56px; --enter-y: 0px; }
+html.is-ready main, html.is-ready #site-footer { opacity: 1; animation: pageIn .65s cubic-bezier(.22,1,.36,1) both; }
+html.is-ready #site-footer { animation-delay: .08s; }
+@keyframes pageIn {
+  from { opacity: 0; transform: translate(var(--enter-x, 0px), var(--enter-y, 22px)) scale(.985); }
+  to   { opacity: 1; transform: none; }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+  main, #site-footer { opacity: 1; animation: none; }
+  html.is-ready main, html.is-ready #site-footer { animation: none; }
+  .site-bg .b1, .site-bg .b2 { animation: none; }
 }
